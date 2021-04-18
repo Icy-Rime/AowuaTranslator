@@ -1,0 +1,15 @@
+{
+  "targets": {
+    "debug": {
+      "binaryFile": "public/core.wasm",
+      "textFile": "public/core.wat",
+      "sourceMap": "public/core.wasm.map",
+      "debug": true
+    },
+    "release": {
+      "binaryFile": "public/core.wasm",
+      "optimize": true
+    }
+  },
+  "options": {}
+}
