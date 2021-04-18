@@ -21,7 +21,13 @@ export async function loadModule (path) {
     return __moduleInfo.modules[path].exports;
   }
   __moduleInfo.loading[path] = true;
-  const wasm = await AsBind.instantiate(fetch(path));
+  const wasm = await AsBind.instantiate(fetch(path), {
+    index: {
+      consoleLog: message => {
+        console.log(message);
+      },
+    },
+  });
   __moduleInfo.modules[path] = wasm;
   __moduleInfo.inited[path] = true;
   __moduleInfo.loading[path] = false;

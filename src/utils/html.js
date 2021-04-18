@@ -14,8 +14,12 @@ export function e (tagName, attr, ...children) {
   for (const k in attr) {
     elem[k] = attr[k];
     if (k === "style") {
-      for (const sk in attr.style) {
-        elem.style[sk] = attr.style[sk];
+      if (typeof(attr.style) === "string") {
+        elem.style.cssText = attr.style;
+      } else {
+        for (const sk in attr.style) {
+          elem.style[sk] = attr.style[sk];
+        }
       }
     }
   }

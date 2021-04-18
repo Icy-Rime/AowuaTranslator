@@ -1,6 +1,6 @@
 {
-  "name": "wasm-worker-template",
-  "short_name": "wasm worker",
+  "name": "Aowua Translator",
+  "short_name": "Roar!",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#000000",

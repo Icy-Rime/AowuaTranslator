@@ -1,13 +1,11 @@
 "use strict";
 import MainFrame from "./pages/MainFrame";
-import { call } from "./in_workers/wasm_in_worker";
-
+import { getText } from "./utils/translate";
 // entry function
 async function main () {
   // registerSW();
+  document.title = getText("aowua_translator");
   setPageContent(MainFrame);
-  let str = await call("asbind", "test passed");
-  console.log(str);
 }
 
 // register function

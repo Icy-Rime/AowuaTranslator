@@ -18,7 +18,7 @@ self.addEventListener("message", async (e) => {
     self.postMessage({
       function: data.function,
       uuid: data.uuid,
-      error: err,
+      error: err.message || true,
       return: null,
     });
   }
