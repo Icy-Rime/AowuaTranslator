@@ -7,6 +7,7 @@ export const toRoar = async (text, code) => {
 };
 
 export const fromRoar = async (roars) => {
+  roars = roars.trim()
   let code = roars.charAt(2) + roars.charAt(1) + roars.charAt(roars.length - 1) + roars.charAt(0);
   roars = roars.substring(3, roars.length-1);
   return await call("textFromRoar", roars, code);

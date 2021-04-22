@@ -1,6 +1,7 @@
 {
 	"pluginName": "兽音译者",
 	"description": "兽音译者 utools 版本",
+	"author": "Dreagonmon",
 	"main": "index.html",
 	"version": "0.0.1",
 	"logo": "img/icons/android-chrome-512x512.png",
