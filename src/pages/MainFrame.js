@@ -3,6 +3,44 @@ import { button } from "../components/Button";
 import { getText } from "../utils/translate";
 import { toRoar, fromRoar } from "../utils/aowua";
 import overlay from "../components/Overlay";
+import utools from "../utils/utools_helper";
+
+let utoolsInput = "";
+(() => {
+  let firstTimeHide = true
+  if (utools) {
+    // 设置utools功能
+    utools.setSubInput( async ({ text }) => {
+      utoolsInput = text;
+      // try decode
+      try {
+        let decodedText = await fromRoar(text);
+        let encoded = getEncodedTextArea();
+        encoded.value = decodedText
+        utools.copyText(decodedText);
+      } catch {
+        // try encode
+        if (firstTimeHide) {
+          firstTimeHide = false;
+          let elems = document.querySelectorAll(".utools_hide");
+          for (let elem of elems) {
+            elem.style.display = "none";
+          }
+        }
+        const code = getCode();
+        if (!checkCode(code)) {
+          await overlay.alert(getText("please_set_correct_code"));
+          return;
+        }
+        let encodedText = await toRoar(text, code);
+        let encoded = getEncodedTextArea();
+        encoded.value = encodedText
+        utools.copyText(encodedText);
+      }
+    }, getText('original_text'));
+    utools.subInputFocus();
+  }
+})()
 
 const LOCAL_STORAGE_KEY_CODE = "config.code";
 const defaultCode = localStorage.getItem(LOCAL_STORAGE_KEY_CODE) || getText("roar_code");
@@ -10,6 +48,9 @@ const onCodeChange = (event) => {
   let newCode = event.target.value;
   if (checkCode(newCode))
     localStorage.setItem(LOCAL_STORAGE_KEY_CODE, newCode);
+  if (utools) {
+    utools.setSubInputValue(utoolsInput)
+  }
 };
 
 const checkCode = (code) => {
@@ -108,12 +149,13 @@ applyStyle(buttonDecode, {...style.button, marginLeft: "10px", marginRight: "10p
 const MainFrame = html`<div style=${style.content}>
   <h2 style=${style.title}>${getText("aowua_translator")}</h2>
   <input id="code" style=${style.codeSetting} value=${defaultCode} onchange=${onCodeChange}/>
-  <textarea id="original_text" style=${style.textarea} placeholder=${getText("original_text")}></textarea>
-  <div style=${style.operationBar}>
+  <textarea id="original_text" className="utools_hide" style=${style.textarea} placeholder=${getText("original_text")}></textarea>
+  <div className="utools_hide" style=${style.operationBar}>
     <${buttonEncode} onclick=${actionEncode} />
     <${buttonDecode} onclick=${actionDecode} />
   </div>
   <textarea id="encoded_text" style=${style.textarea} placeholder=${getText("encoded_text")}></textarea>
   ${overlay.element}
 </div>`;
+
 export default MainFrame;
